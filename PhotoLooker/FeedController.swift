@@ -9,9 +9,11 @@
 import UIKit
 
 class FeedController: UICollectionViewController {
+    
+    //MARK: - Lifecycle events
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.backgroundColor = UIColor.red
+        navigationItem.title = "Looker results"
+        collectionView?.backgroundColor = UIColor(white: 0.95, alpha: 1)
     }
 }
-

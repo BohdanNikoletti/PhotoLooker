@@ -19,9 +19,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
-        let feedController = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
-        let navigationController = UINavigationController(rootViewController: feedController)
+//        let feedController = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
+        let historyController = LookerHistoryTableViewController()
+        let navigationController = UINavigationController(rootViewController: historyController)
+        navigationController.navigationBar.barTintColor = UIColor.purple
+        navigationController.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         window?.rootViewController = navigationController
+                
+        application.statusBarStyle = .lightContent
+        
         return true
     }
 

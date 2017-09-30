@@ -7,26 +7,29 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
-final class HistoryTableViewController: UITableViewController{
+final class HistoryTableViewController: UITableViewController, NVActivityIndicatorViewable{
     
     //MARK: - Properties
     private let searchController = UISearchController(searchResultsController: nil)
+    private let cellId = "historyCell"
     fileprivate let unfilteredRequests = ["cat", "girls", "boys"].sorted()
     fileprivate var filterRequests: [String]?
     fileprivate var request: AnyObject?
-    
+    //private let activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 40, y: 40, width: 200, height: 300))
+
     //MARK: - Lifecycle events
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Looker History"
         filterRequests = unfilteredRequests
-        
+
         self.navigationItem.backBarButtonItem = UIBarButtonItem(
             title: "", style: .plain, target: nil, action: nil)
         
         tableView.tableFooterView = UIView()
-        tableView.register(HistoryCell.self, forCellReuseIdentifier: "basicCell")
+        tableView.register(HistoryCell.self, forCellReuseIdentifier: cellId)
         
         searchController.searchResultsUpdater = self
         searchController.hidesNavigationBarDuringPresentation = false
@@ -49,13 +52,12 @@ final class HistoryTableViewController: UITableViewController{
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "basicCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         cell.accessoryType = .disclosureIndicator
         if let requests = filterRequests {
             let request = requests[indexPath.row]
             cell.textLabel!.text = request
             cell.imageView?.image = UIImage(named: "empty")
-            
         }
         return cell
     }
@@ -81,7 +83,7 @@ final class HistoryTableViewController: UITableViewController{
             searchController.dismiss(animated: true, completion: nil)
         }
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
+        layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
         layout.itemSize = CGSize(width: self.view.frame.size.width/3, height: self.view.frame.size.width/3)
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
@@ -90,6 +92,9 @@ final class HistoryTableViewController: UITableViewController{
         self.navigationController?.pushViewController(feedController, animated: true)
     }
     fileprivate func loadImages(_ searchPhrase: String){
+        let size = CGSize(width: 30, height: 30)
+        startAnimating(size, message: "Looking for \(searchPhrase) images...😉", type: NVActivityIndicatorType.orbit)
+        
         let iamgesReqource = ImageResource(searchTo: searchPhrase)
         let imagesRequest = ApiRequest(resource: iamgesReqource)
         request = imagesRequest
@@ -98,14 +103,20 @@ final class HistoryTableViewController: UITableViewController{
             guard let items = imageItems,
                 let firstItem = items.first
                 else {
-                    return //MARK: - TODO PROCESS EMPTY RESPONSE
+                    NVActivityIndicatorPresenter.sharedInstance.setMessage("Searching for \(searchPhrase) didn't give any results 😔")
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                        self?.stopAnimating()
+                    }
+                    return
             }
             print(firstItem)
+            self?.stopAnimating()
             self?.navigateToFeedController(withData: items)
         }
 
     }
 }
+//MARK: - UISearchResultsUpdating, UISearchBarDelegate
 extension HistoryTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
     
     //MARK: - UISearchResultsUpdating

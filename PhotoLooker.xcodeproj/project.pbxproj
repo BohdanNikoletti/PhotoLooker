@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		406B683A1F8040C000FB8766 /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406B68391F8040C000FB8766 /* FeedCell.swift */; };
 		40D25FD41F7EAD9F00D350DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D25FD31F7EAD9F00D350DD /* AppDelegate.swift */; };
 		40D25FD61F7EAD9F00D350DD /* FeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D25FD51F7EAD9F00D350DD /* FeedController.swift */; };
 		40D25FDB1F7EAD9F00D350DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40D25FDA1F7EAD9F00D350DD /* Assets.xcassets */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		0D4A1C18DF3E01E2B73D08C1 /* Pods_PhotoLooker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PhotoLooker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		406B68391F8040C000FB8766 /* FeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		40D25FD01F7EAD9F00D350DD /* PhotoLooker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoLooker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40D25FD31F7EAD9F00D350DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		40D25FD51F7EAD9F00D350DD /* FeedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedController.swift; sourceTree = "<group>"; };
@@ -52,6 +54,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		406B683B1F8043CE00FB8766 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				40D25FD51F7EAD9F00D350DD /* FeedController.swift */,
+				406B68391F8040C000FB8766 /* FeedCell.swift */,
+			);
+			name = Feed;
+			sourceTree = "<group>";
+		};
 		40D25FC71F7EAD9F00D350DD = {
 			isa = PBXGroup;
 			children = (
@@ -104,8 +115,8 @@
 		40F2D4531F8013EC00634039 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				40D25FD51F7EAD9F00D350DD /* FeedController.swift */,
 				40F2D4431F7EC60400634039 /* HistoryTableViewController.swift */,
+				406B683B1F8043CE00FB8766 /* Feed */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -271,6 +282,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40F2D44D1F80103300634039 /* ApiResource.swift in Sources */,
+				406B683A1F8040C000FB8766 /* FeedCell.swift in Sources */,
 				40F2D4471F7FA49200634039 /* ImageItem.swift in Sources */,
 				40D25FD61F7EAD9F00D350DD /* FeedController.swift in Sources */,
 				40F2D4511F80136300634039 /* SearchStoryItem.swift in Sources */,

@@ -14,17 +14,17 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
     //MARK: - Properties
     private let searchController = UISearchController(searchResultsController: nil)
     private let cellId = "historyCell"
+    fileprivate lazy var requests = HistoryItem.getHistory()
     fileprivate let unfilteredRequests = ["cat", "girls", "boys"].sorted()
     fileprivate var filterRequests: [String]?
     fileprivate var request: AnyObject?
-    //private let activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 40, y: 40, width: 200, height: 300))
 
     //MARK: - Lifecycle events
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Looker History"
         filterRequests = unfilteredRequests
-
+        
         self.navigationItem.backBarButtonItem = UIBarButtonItem(
             title: "", style: .plain, target: nil, action: nil)
         
@@ -44,9 +44,9 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let requests = filterRequests else {
-            return 0
-        }
+//        guard let requests = filterRequests else {
+//            return 0
+//        }
         return requests.count
     }
 
@@ -72,9 +72,9 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
 //    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //MARK: - TODO change to ImageItem obj now is dummy
-        let selectedRequest = unfilteredRequests[indexPath.row]
-        loadImages(selectedRequest)
+        let selectedRequest = requests[indexPath.row]
+        let requestPhrase = selectedRequest.requestPhrase
+        loadImages(requestPhrase)
     }
     
     //MARK: - Private methods
@@ -98,6 +98,7 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
         let iamgesReqource = ImageResource(searchTo: searchPhrase)
         let imagesRequest = ApiRequest(resource: iamgesReqource)
         request = imagesRequest
+        
         imagesRequest.load {
             [weak self] (imageItems: [ImageItem]?) in
             guard let items = imageItems,

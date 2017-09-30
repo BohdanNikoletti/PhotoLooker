@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class LookerHistoryTableViewController: UITableViewController{
+final class HistoryTableViewController: UITableViewController{
     
     //MARK: - Properties
     private let searchController = UISearchController(searchResultsController: nil)
@@ -20,7 +20,9 @@ final class LookerHistoryTableViewController: UITableViewController{
         super.viewDidLoad()
         navigationItem.title = "Looker History"
         filterRequests = unfilteredRequests
-        
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(
+            title: "", style: .plain, target: nil, action: nil)
+
         tableView.tableFooterView = UIView()
         
         tableView.register(HistoryCell.self, forCellReuseIdentifier: "basicCell")
@@ -70,7 +72,7 @@ final class LookerHistoryTableViewController: UITableViewController{
         self.navigationController?.pushViewController(feedController, animated: true)
     }
 }
-extension LookerHistoryTableViewController: UISearchResultsUpdating{
+extension HistoryTableViewController: UISearchResultsUpdating{
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {
             filterRequests = unfilteredRequests.filter { team in

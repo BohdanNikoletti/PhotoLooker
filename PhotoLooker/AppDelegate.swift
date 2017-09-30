@@ -20,9 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
 //        let feedController = FeedController(collectionViewLayout: UICollectionViewFlowLayout())
-        let historyController = LookerHistoryTableViewController()
+        let historyController = HistoryTableViewController()
         let navigationController = UINavigationController(rootViewController: historyController)
         navigationController.navigationBar.barTintColor = UIColor.purple
+        navigationController.navigationBar.tintColor = UIColor.white
+
         navigationController.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         window?.rootViewController = navigationController
                 

@@ -11,7 +11,7 @@
 		40D25FD61F7EAD9F00D350DD /* FeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D25FD51F7EAD9F00D350DD /* FeedController.swift */; };
 		40D25FDB1F7EAD9F00D350DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40D25FDA1F7EAD9F00D350DD /* Assets.xcassets */; };
 		40D25FDE1F7EAD9F00D350DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40D25FDC1F7EAD9F00D350DD /* LaunchScreen.storyboard */; };
-		40F2D4441F7EC60400634039 /* LookerHistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F2D4431F7EC60400634039 /* LookerHistoryTableViewController.swift */; };
+		40F2D4441F7EC60400634039 /* HistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F2D4431F7EC60400634039 /* HistoryTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,7 +21,7 @@
 		40D25FDA1F7EAD9F00D350DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		40D25FDD1F7EAD9F00D350DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		40D25FDF1F7EAD9F00D350DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		40F2D4431F7EC60400634039 /* LookerHistoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LookerHistoryTableViewController.swift; sourceTree = "<group>"; };
+		40F2D4431F7EC60400634039 /* HistoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +56,7 @@
 			children = (
 				40D25FD31F7EAD9F00D350DD /* AppDelegate.swift */,
 				40D25FD51F7EAD9F00D350DD /* FeedController.swift */,
-				40F2D4431F7EC60400634039 /* LookerHistoryTableViewController.swift */,
+				40F2D4431F7EC60400634039 /* HistoryTableViewController.swift */,
 				40D25FDA1F7EAD9F00D350DD /* Assets.xcassets */,
 				40D25FDC1F7EAD9F00D350DD /* LaunchScreen.storyboard */,
 				40D25FDF1F7EAD9F00D350DD /* Info.plist */,
@@ -136,7 +136,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40D25FD61F7EAD9F00D350DD /* FeedController.swift in Sources */,
-				40F2D4441F7EC60400634039 /* LookerHistoryTableViewController.swift in Sources */,
+				40F2D4441F7EC60400634039 /* HistoryTableViewController.swift in Sources */,
 				40D25FD41F7EAD9F00D350DD /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

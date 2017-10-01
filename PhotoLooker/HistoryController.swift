@@ -41,16 +41,13 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
         super.didReceiveMemoryWarning()
         URLCache.shared.removeAllCachedResponses()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
     
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        if filteredRequests == nil{
-            filteredRequests = requests
-        }
-        tableView.reloadData()
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredRequests.count
@@ -69,16 +66,9 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let removedItem = filteredRequests.remove(at: indexPath.row)
-            requests = requests.filter{
-                if $0.requestPhrase != removedItem.requestPhrase{
-                    return true
-                }else{
-                    HistoryItem.perform(operation: .delete, on: $0)
-                    return false
-                }
-            }
+            HistoryItem.perform(operation: .delete, on: filteredRequests.remove(at: indexPath.row))
             tableView.deleteRows(at: [indexPath], with: .fade)
+            requests = filteredRequests
         }
     }
     
@@ -163,14 +153,16 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
             if let data = UIImageJPEGRepresentation(image, 0.5){
                 
                 let docDir = URL(fileURLWithPath: FileManager.getDocumentDirectory())
-                let imageURL = docDir.appendingPathComponent("\(item.id).jpg")
+                let imageLocalURL = docDir.appendingPathComponent("\(item.id).jpg")
                 
                 let historyItem = HistoryItem()
-                historyItem.imagePath = imageURL.path
+                historyItem.imagePath = imageLocalURL.path
                 historyItem.requestPhrase = searchPhrase.lowercased()
                 HistoryItem.perform(operation: .add, on: historyItem)
                 do{
-                    try data.write(to: imageURL)
+                    if !FileManager.default.fileExists(atPath: imageLocalURL.path){
+                        try data.write(to: imageLocalURL)
+                    }
                 }catch {
                     print("Caching history image error: \(error.localizedDescription)")
                 }

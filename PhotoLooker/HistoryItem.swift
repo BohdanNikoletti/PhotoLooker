@@ -41,6 +41,11 @@ class HistoryItem: Object{
                         print("Item: \(item) is invalidated")
                         return
                     }
+                    do{
+                        try FileManager.default.removeItem(at: URL(string: "file://\(item.imagePath)")!)
+                    }catch{
+                        print("error: \(error.localizedDescription)")
+                    }
                     realm.delete(item)
                 }
             }

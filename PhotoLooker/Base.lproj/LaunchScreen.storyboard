@@ -28,12 +28,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.57349640130996704" green="0.14563155174255371" blue="0.57084023952484131" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.5725490196078431" green="0.14509803921568626" blue="0.5725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Xlr-Mg-nzY" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="JMl-PV-SPI"/>
                             <constraint firstItem="Xlr-Mg-nzY" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="gHM-vN-jvu"/>
                         </constraints>
                     </view>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

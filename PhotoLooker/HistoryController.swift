@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-final class HistoryTableViewController: UITableViewController, NVActivityIndicatorViewable{
+final class HistoryController: UITableViewController, NVActivityIndicatorViewable{
     
     //MARK: - Properties
     private let searchController = UISearchController(searchResultsController: nil)
@@ -21,7 +21,9 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
     //MARK: - Lifecycle events
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tableView.backgroundColor = AppColors.secondaryLight
+
+        tableView.separatorStyle = .singleLine
         settingUpCache()
         
         filteredRequests = requests
@@ -53,22 +55,18 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredRequests.count
     }
-
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        cell.accessoryType = .disclosureIndicator
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as? HistoryCell else{
+            fatalError("Unexpected cell! cann not cast to HistoryCell")
+        }
         let historyItem = filteredRequests[indexPath.row]
-        cell.textLabel?.text = historyItem.requestPhrase.uppercased()
-        cell.imageView?.image = getImage(from: historyItem.imagePath)
+        cell.historyItem = historyItem
         return cell
     }
-    func getImage(from urlString: String) -> UIImage{
-        guard let cashedImage = UIImage(contentsOfFile: urlString) else{
-            return UIImage(named: "empty")!
-        }
-        return cashedImage
-    }
-    // Override to support editing the table view.
+    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let removedItem = filteredRequests.remove(at: indexPath.row)
@@ -186,21 +184,18 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
     }
 }
 
-extension HistoryTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
+extension HistoryController: UISearchResultsUpdating, UISearchBarDelegate{
     
     //MARK: - UISearchResultsUpdating
     func updateSearchResults(for searchController: UISearchController) {
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {
             filteredRequests = requests.filter {
                 request in
-                print(request.requestPhrase)
-                print(request.requestPhrase.lowercased().contains(searchText.lowercased()))
                 return request.requestPhrase.lowercased().contains(searchText.lowercased())
             }
         } else {
             filteredRequests = requests
         }
-        print(filteredRequests)
         tableView.reloadData()
     }
     
@@ -208,27 +203,5 @@ extension HistoryTableViewController: UISearchResultsUpdating, UISearchBarDelega
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchBarText = searchBar.text else {return}
         loadImages(searchBarText)
-    }
-}
-
-final class HistoryCell: UITableViewCell {
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViews()
-    }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setupViews(){
-        imageView?.contentMode = .scaleAspectFit
-        backgroundColor = UIColor.white
-    }
-}
-extension FileManager {
-    class func getDocumentDirectory() -> String{
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        return paths.first!
     }
 }

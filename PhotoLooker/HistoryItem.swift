@@ -37,6 +37,10 @@ class HistoryItem: Object{
                 case .add:
                     realm.add(item, update: true)
                 case . delete:
+                    if item.isInvalidated {
+                        print("Item: \(item) is invalidated")
+                        return
+                    }
                     realm.delete(item)
                 }
             }

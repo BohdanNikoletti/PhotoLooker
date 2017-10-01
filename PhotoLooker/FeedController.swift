@@ -17,9 +17,9 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     //MARK: - Lifecycle events
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         navigationItem.title = "Looker results"
-        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.tintColor = AppColors.primary
         
         settingUpcollectionView()
     }
@@ -51,9 +51,8 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     //MARK: - Private methods
     private func settingUpcollectionView(){
         collectionView?.alwaysBounceVertical = true
-        collectionView?.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        collectionView?.backgroundColor =  AppColors.secondaryLight
         collectionView?.register(FeedCeel.self, forCellWithReuseIdentifier: cellId)
-
     }
 }
 

@@ -57,7 +57,6 @@ class FeedCeel: UICollectionViewCell {
         imageReq.load(withCompletion: {
             [weak self] (image: UIImage?) in
             guard let image = image else {return}
-            //imageCache.setObject(image, forKey: NSString(string: imageUrl.path))
             let imageView = UIImageView(image: image)
             imageView.contentMode = .scaleAspectFit
             self?.backgroundView = imageView
@@ -65,14 +64,9 @@ class FeedCeel: UICollectionViewCell {
             self?.activityIndicatorView.stopAnimating()
         })
     }
-//    private func getCached(image: String) -> UIImage{
-//        if let image = imageCache.object(forKey: image){
-//            
-//        }
-//    }
     private func setupViews(){
         
-        backgroundColor = UIColor.white
+        backgroundColor = AppColors.primary
         layer.borderWidth = 1
         layer.borderColor = UIColor.black.cgColor
         
@@ -80,7 +74,7 @@ class FeedCeel: UICollectionViewCell {
         let height = frame.height / 4
         activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 3, y: 3, width: witdh, height: height),
                                                         type: NVActivityIndicatorType.orbit)
-        activityIndicatorView.color = UIColor.purple
+        activityIndicatorView.color = AppColors.primaryDark
     }
     
     private func addViews(){

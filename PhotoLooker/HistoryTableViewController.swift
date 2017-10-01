@@ -21,6 +21,9 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
     //MARK: - Lifecycle events
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        settingUpCache()
+        
         filteredRequests = requests
 
         navigationItem.title = "Looker History"
@@ -32,7 +35,11 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
         
         settingUpSearchControl()
     }
-
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        URLCache.shared.removeAllCachedResponses()
+    }
+    
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -84,6 +91,12 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
     }
     
     //MARK: - Private methods
+    private func settingUpCache(){
+        let memoryCapacity = 30 * 512 * 512
+        let dislCapacity = memoryCapacity
+        let urlCache = URLCache(memoryCapacity: memoryCapacity, diskCapacity: dislCapacity, diskPath: "PhotoLooker")
+        URLCache.shared = urlCache
+    }
     private func settingUpSearchControl(){
         searchController.searchResultsUpdater = self
         searchController.hidesNavigationBarDuringPresentation = false
@@ -173,7 +186,6 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
     }
 }
 
-//MARK: - UISearchResultsUpdating, UISearchBarDelegate
 extension HistoryTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
     
     //MARK: - UISearchResultsUpdating

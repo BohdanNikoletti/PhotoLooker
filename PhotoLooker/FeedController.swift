@@ -23,6 +23,10 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         settingUpcollectionView()
     }
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        URLCache.shared.removeAllCachedResponses()
+    }
     
     // MARK: - Collection view data source
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

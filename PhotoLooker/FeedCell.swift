@@ -9,6 +9,8 @@
 import UIKit
 import NVActivityIndicatorView
 
+let imageCache = NSCache<NSString, UIImage>()
+
 class FeedCeel: UICollectionViewCell {
     
     //MARK: - Properties
@@ -45,15 +47,17 @@ class FeedCeel: UICollectionViewCell {
     
     //MARK: - Private methods
     private func fetchImage() {
-        activityIndicatorView.startAnimating()
+        guard let imageUrl = feedItem?.imageURL else{return}
         
-        let imageUrl = feedItem?.imageURL
-        let imageReq = ImageRequest(url: imageUrl!)
+        activityIndicatorView.startAnimating()
+
+        let imageReq = ImageRequest(url: imageUrl)
         request = imageReq
         
         imageReq.load(withCompletion: {
             [weak self] (image: UIImage?) in
             guard let image = image else {return}
+            //imageCache.setObject(image, forKey: NSString(string: imageUrl.path))
             let imageView = UIImageView(image: image)
             imageView.contentMode = .scaleAspectFit
             self?.backgroundView = imageView
@@ -61,6 +65,11 @@ class FeedCeel: UICollectionViewCell {
             self?.activityIndicatorView.stopAnimating()
         })
     }
+//    private func getCached(image: String) -> UIImage{
+//        if let image = imageCache.object(forKey: image){
+//            
+//        }
+//    }
     private func setupViews(){
         
         backgroundColor = UIColor.white

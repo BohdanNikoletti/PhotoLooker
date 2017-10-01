@@ -8,13 +8,17 @@
 
 import Foundation
 import RealmSwift
-
+enum HistoryItemOperations{
+    case add
+    case delete
+}
 class HistoryItem: Object{
+    
     //MARK: - Properties
     @objc dynamic var imagePath: String = ""
     @objc dynamic var requestPhrase: String = ""
     
-    //MARK: - Static methods
+    //MARK: - Public methods
     override static func primaryKey() ->String? {
         return "requestPhrase"
     }
@@ -23,22 +27,22 @@ class HistoryItem: Object{
         let realm = try! Realm()
         return Array(realm.objects(HistoryItem.self))
     }
-    
-    static func add(historyItem item: HistoryItem){
+
+    static func perform(operation: HistoryItemOperations, on item: HistoryItem){
         let realm = try! Realm()
         do {
             try realm.write {
-                print(item.requestPhrase)
-                realm.add(item, update: true)
+                
+                switch operation {
+                case .add:
+                    realm.add(item, update: true)
+                case . delete:
+                    realm.delete(item)
+                }
             }
         }catch {
-            print("Can not save history item: \(item)")
+            print("Can not \(operation) history item: \(item)")
         }
-    }
-    
-    //MARK: - Public functions
-    private static func incrementID() -> Int {
-        let realm = try! Realm()
-        return (realm.objects(HistoryItem.self).max(ofProperty: "id") as Int? ?? 0) + 1
+        
     }
 }

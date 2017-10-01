@@ -14,7 +14,7 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
     //MARK: - Properties
     private let searchController = UISearchController(searchResultsController: nil)
     private let cellId = "historyCell"
-    fileprivate lazy var requests = HistoryItem.getHistory()
+    fileprivate var requests = HistoryItem.getHistory()
     fileprivate var filteredRequests: [HistoryItem]!
     fileprivate var request: AnyObject?
 
@@ -37,17 +37,21 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    override func viewWillAppear(_ animated: Bool) {
+        if filteredRequests == nil{
+            filteredRequests = requests
+        }
+        tableView.reloadData()
+    }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredRequests.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         cell.accessoryType = .disclosureIndicator
-        let historyItem = requests[indexPath.row]
-        cell.textLabel?.text = historyItem.requestPhrase
+        let historyItem = filteredRequests[indexPath.row]
+        cell.textLabel?.text = historyItem.requestPhrase.uppercased()
         cell.imageView?.image = getImage(from: historyItem.imagePath)
         return cell
     }
@@ -60,14 +64,21 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
-            requests.remove(at: indexPath.row)
+            let removedItem = filteredRequests.remove(at: indexPath.row)
+            requests = requests.filter{
+                if $0.requestPhrase != removedItem.requestPhrase{
+                    return true
+                }else{
+                    HistoryItem.perform(operation: .delete, on: $0)
+                    return false
+                }
+            }
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedRequest = requests[indexPath.row]
+        let selectedRequest = filteredRequests[indexPath.row]
         let requestPhrase = selectedRequest.requestPhrase
         loadImages(requestPhrase)
     }
@@ -81,19 +92,24 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
         tableView.tableHeaderView = searchController.searchBar
     }
     fileprivate func navigateToFeedController(withData loadedData: [ImageItem]){
+        
         if searchController.isActive{
             searchController.dismiss(animated: true, completion: nil)
         }
+        
+        //Customize feed control layout
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
         layout.itemSize = CGSize(width: self.view.frame.size.width/3, height: self.view.frame.size.width/3)
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
+        
         let feedController = FeedController(collectionViewLayout: layout)
         feedController.items = loadedData
         self.navigationController?.pushViewController(feedController, animated: true)
     }
     fileprivate func loadImages(_ searchPhrase: String){
+        searchController.searchBar.resignFirstResponder()
         let size = CGSize(width: 30, height: 30)
         startAnimating(size, message: "Looking for \(searchPhrase) images...😉", type: NVActivityIndicatorType.orbit)
         
@@ -140,19 +156,17 @@ final class HistoryTableViewController: UITableViewController, NVActivityIndicat
                 
                 let historyItem = HistoryItem()
                 historyItem.imagePath = imageURL.path
-                historyItem.requestPhrase = searchPhrase
-                HistoryItem.add(historyItem: historyItem)
-                
+                historyItem.requestPhrase = searchPhrase.lowercased()
+                HistoryItem.perform(operation: .add, on: historyItem)
                 do{
                     try data.write(to: imageURL)
                 }catch {
-                    print("cashing hostory image error: \(error.localizedDescription)")
+                    print("Caching history image error: \(error.localizedDescription)")
                 }
-                
-                guard let _ = self?.requests.contains(historyItem) else{
+                if (self?.requests.filter{ $0.requestPhrase == historyItem.requestPhrase})?.count == 0 {
                     self?.requests.append(historyItem)
+                    self?.filteredRequests = self?.requests
                     self?.tableView.reloadData()
-                    return
                 }
             }
         })
@@ -167,11 +181,14 @@ extension HistoryTableViewController: UISearchResultsUpdating, UISearchBarDelega
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {
             filteredRequests = requests.filter {
                 request in
+                print(request.requestPhrase)
+                print(request.requestPhrase.lowercased().contains(searchText.lowercased()))
                 return request.requestPhrase.lowercased().contains(searchText.lowercased())
             }
         } else {
             filteredRequests = requests
         }
+        print(filteredRequests)
         tableView.reloadData()
     }
     

@@ -9,12 +9,15 @@
 import Foundation
 
 class ApiRequest<Resource: ApiResource>{
+    
     let resource: Resource
     init(resource: Resource) {
         self.resource = resource
     }
+    
 }
 extension  ApiRequest: NetworkRequest {
+    
     func decode(_ data: Data) -> [Resource.Model]? {
         return resource.makeModel(data: data)
     }
@@ -22,4 +25,5 @@ extension  ApiRequest: NetworkRequest {
     func load(withCompletion completion: @escaping ([Resource.Model]?) -> Void) {
         load(resource.url, authHeader: ["Api-Key": "pesprtpumxqpqzsv6q37kn8s"], withCompletion: completion)
     }
+    
 }

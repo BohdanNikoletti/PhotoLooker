@@ -9,6 +9,7 @@
 import UIKit
 
 class ImageRequest {
+    
     let url: URL
     
     init(url: URL) {
@@ -16,11 +17,12 @@ class ImageRequest {
     }
 }
 extension ImageRequest: NetworkRequest {
+    
     func decode(_ data: Data) -> UIImage?{
         return UIImage(data: data)
     }
     
-    func load(withCompletion completion: @escaping(UIImage?) -> Void) {
+    func load(withCompletion completion: @escaping(UIImage?) -> ()) {
         load(url, withCompletion: completion)
     }
 }

@@ -10,13 +10,13 @@ import Foundation
 import RealmSwift
 
 class HistoryItem: Object{
-    
-    @objc dynamic var id = 0
+    //MARK: - Properties
     @objc dynamic var imagePath: String = ""
     @objc dynamic var requestPhrase: String = ""
     
+    //MARK: - Static methods
     override static func primaryKey() ->String? {
-        return "id"
+        return "requestPhrase"
     }
     
     static func getHistory() -> [HistoryItem]{
@@ -28,10 +28,17 @@ class HistoryItem: Object{
         let realm = try! Realm()
         do {
             try realm.write {
-                realm.add(item)
+                print(item.requestPhrase)
+                realm.add(item, update: true)
             }
         }catch {
             print("Can not save history item: \(item)")
         }
+    }
+    
+    //MARK: - Public functions
+    private static func incrementID() -> Int {
+        let realm = try! Realm()
+        return (realm.objects(HistoryItem.self).max(ofProperty: "id") as Int? ?? 0) + 1
     }
 }

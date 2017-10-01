@@ -16,7 +16,8 @@ protocol NetworkRequest: class {
 
 extension NetworkRequest {
     
-    func load(_ url: URL, authHeader: [String: String]? = nil, withCompletion completion: @escaping (Model?) -> ()) {
+    func load(_ url: URL, authHeader: [String: String]? = nil,
+              withCompletion completion: @escaping (Model?) -> ()) {
         let configuration = URLSessionConfiguration.ephemeral
         if let header = authHeader{
             configuration.httpAdditionalHeaders = header 

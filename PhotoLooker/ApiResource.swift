@@ -16,6 +16,7 @@ protocol ApiResource {
 }
 
 extension ApiResource {
+    
     var url: URL{
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
@@ -30,6 +31,7 @@ extension ApiResource {
         
         return urlComponents.url!
     }
+    
     func makeModel(data: Data) ->[Model]? {
         guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) else {return nil}
         let jsonObj = json as? [String: Any]

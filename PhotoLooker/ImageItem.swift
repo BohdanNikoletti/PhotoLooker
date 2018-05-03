@@ -10,17 +10,18 @@ import UIKit
 
 struct ImageItem{
     
-    //MARK: - Properties
+    // MARK: - Properties
     let id: String
     let title: String
     let imageURL: URL
     
-    //MARK: - Initializers
+    // MARK: - Initializers
     init(id: String, title: String, imageURL: URL){
         self.id = id
         self.title = title
         self.imageURL = imageURL
     }
+  
     init?(withJsonObject json: [String: Any]){
         guard let id = json["id"] as? String,
             let title = json["title"] as? String,

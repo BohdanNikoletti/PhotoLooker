@@ -23,7 +23,7 @@ extension  ApiRequest: NetworkRequest {
     }
     
     func load(withCompletion completion: @escaping ([Resource.Model]?) -> Void) {
-        load(resource.url, authHeader: ["Api-Key": "pesprtpumxqpqzsv6q37kn8s"], withCompletion: completion)
+        load(resource.url, authHeader: ["Api-Key": "3uzbn7xfgxc7gegnpetpp7k9"], withCompletion: completion)
     }
     
 }

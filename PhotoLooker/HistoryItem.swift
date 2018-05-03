@@ -8,10 +8,12 @@
 
 import Foundation
 import RealmSwift
+
 enum HistoryItemOperations{
     case add
     case delete
 }
+
 class HistoryItem: Object{
     
     //MARK: - Properties

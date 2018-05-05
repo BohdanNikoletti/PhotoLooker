@@ -8,11 +8,11 @@
 
 import UIKit
 
-class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+final class FeedController: UICollectionViewController {
     
     //MARK: - Properties
     var items = [ImageItem]()
-    private var cellId = "feedCell"
+    private let cellId = "feedCell"
     
     //MARK: - Lifecycle events
     override func viewDidLoad() {
@@ -41,13 +41,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         cell.feedItem = items[indexPath.row]
         return cell
     }
-    
-    //MARK: - Flow layout delegate
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let picDimension = self.view.frame.size.width / 3.0
-        return CGSize(width: picDimension, height: picDimension)
-    }
-    
+
     //MARK: - Private methods
     private func settingUpcollectionView(){
         collectionView?.alwaysBounceVertical = true
@@ -56,4 +50,12 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
 }
 
+// MARK: - Flow layout delegate
+extension FeedController: UICollectionViewDelegateFlowLayout {
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    let picDimension = self.view.frame.size.width / 3.0
+    return CGSize(width: picDimension, height: picDimension)
+  }
+  
+}
 

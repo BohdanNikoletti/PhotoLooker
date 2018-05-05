@@ -20,7 +20,7 @@ extension ApiResource {
     var url: URL{
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
-        urlComponents.host = "api.gettyimages.com"
+        urlComponents.host = APIEndpoints.host
         urlComponents.path = "/v3/search\(methodPath)"
         
         let fieldsQuery = URLQueryItem(name: "fields", value: "id,title,thumb")
@@ -42,16 +42,3 @@ extension ApiResource {
     }
 }
 
-struct ImageResource: ApiResource {
-    
-    var searchPhrase: String
-    let methodPath = "/images"
-    
-    init(searchTo phrase: String){
-        self.searchPhrase = phrase
-    }
-    
-    func makeModel(serialization:  [String: Any]) -> ImageItem? {
-        return ImageItem(withJsonObject: serialization)
-    }
-}

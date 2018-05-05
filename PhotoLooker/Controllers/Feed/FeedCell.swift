@@ -8,10 +8,10 @@
 
 import UIKit
 import NVActivityIndicatorView
-
+// TODO: Images in cell cashing
 let imageCache = NSCache<NSString, UIImage>()
 
-class FeedCeel: UICollectionViewCell {
+final class FeedCeel: UICollectionViewCell {
     
     //MARK: - Properties
     private var request: AnyObject?
@@ -34,7 +34,7 @@ class FeedCeel: UICollectionViewCell {
         }
     }
     
-    //MARK: - Initializers
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -45,7 +45,7 @@ class FeedCeel: UICollectionViewCell {
         super.init(coder: aDecoder)
     }
     
-    //MARK: - Private methods
+    // MARK: - Private methods
     private func fetchImage() {
         guard let imageUrl = feedItem?.imageURL else{return}
         
@@ -64,6 +64,7 @@ class FeedCeel: UICollectionViewCell {
             self?.activityIndicatorView.stopAnimating()
         })
     }
+  
     private func setupViews(){
         
         backgroundColor = AppColors.primary

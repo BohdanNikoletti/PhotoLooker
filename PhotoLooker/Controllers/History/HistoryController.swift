@@ -162,22 +162,12 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
       // Save locally image and request data
       if let data = UIImageJPEGRepresentation(image, 0.5),
         let image = UIImage(data: data) {
-        //
-        //                let docDir = URL(fileURLWithPath: FileManager.getDocumentDirectory())
-        //                let imageLocalURL = docDir.appendingPathComponent("\(item.id).jpg")
         ImageCachingService.sharedInstance.saveImage(image: image, key: item.imageKey)
         
         let historyItem = HistoryItem()
         historyItem.imagePath = item.imageKey
         historyItem.requestPhrase = searchPhrase.lowercased()
         HistoryItem.perform(operation: .add, on: historyItem)
-        //                do{
-        //                    if !FileManager.default.fileExists(atPath: imageLocalURL.path){
-        //                        try data.write(to: imageLocalURL)
-        //                    }
-        //                }catch {
-        //                    print("Caching history image error: \(error.localizedDescription)")
-        //                }
         if (self?.requests.filter{ $0.requestPhrase == historyItem.requestPhrase})?.count == 0 {
           self?.requests.append(historyItem)
           self?.filteredRequests = self?.requests

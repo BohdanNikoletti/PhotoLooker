@@ -16,6 +16,7 @@
 		40D4063B209E0DDC00CEA963 /* ImageResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D4063A209E0DDC00CEA963 /* ImageResource.swift */; };
 		40D4063F209E0FEB00CEA963 /* ImageCachingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D4063E209E0FEB00CEA963 /* ImageCachingService.swift */; };
 		40D658A91F817F5E005C02B2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D658A81F817F5E005C02B2 /* Constants.swift */; };
+		40F104C5209F08DC00AFC4A6 /* DisplaySize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F104C4209F08DC00AFC4A6 /* DisplaySize.swift */; };
 		40F2D4441F7EC60400634039 /* HistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F2D4431F7EC60400634039 /* HistoryController.swift */; };
 		40F2D4471F7FA49200634039 /* ImageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F2D4461F7FA49200634039 /* ImageItem.swift */; };
 		40F2D4491F7FBD9300634039 /* ImageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F2D4481F7FBD9300634039 /* ImageRequest.swift */; };
@@ -39,6 +40,7 @@
 		40D4063A209E0DDC00CEA963 /* ImageResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResource.swift; sourceTree = "<group>"; };
 		40D4063E209E0FEB00CEA963 /* ImageCachingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCachingService.swift; sourceTree = "<group>"; };
 		40D658A81F817F5E005C02B2 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		40F104C4209F08DC00AFC4A6 /* DisplaySize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySize.swift; sourceTree = "<group>"; };
 		40F2D4431F7EC60400634039 /* HistoryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryController.swift; sourceTree = "<group>"; };
 		40F2D4461F7FA49200634039 /* ImageItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageItem.swift; sourceTree = "<group>"; };
 		40F2D4481F7FBD9300634039 /* ImageRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRequest.swift; sourceTree = "<group>"; };
@@ -86,8 +88,9 @@
 				40D25FD31F7EAD9F00D350DD /* AppDelegate.swift */,
 				40D658A81F817F5E005C02B2 /* Constants.swift */,
 				40D4063E209E0FEB00CEA963 /* ImageCachingService.swift */,
-				40D40635209E0CC200CEA963 /* Models */,
 				40D40639209E0D1F00CEA963 /* Network */,
+				40D40635209E0CC200CEA963 /* Models */,
+				40F104C6209F093600AFC4A6 /* Views */,
 				40D40636209E0CD900CEA963 /* Controllers */,
 				40F2D4451F7FA40600634039 /* Resources */,
 			);
@@ -99,6 +102,7 @@
 			children = (
 				40F2D4461F7FA49200634039 /* ImageItem.swift */,
 				40F2D4501F80136300634039 /* HistoryItem.swift */,
+				40F104C4209F08DC00AFC4A6 /* DisplaySize.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -116,7 +120,6 @@
 			isa = PBXGroup;
 			children = (
 				40F2D4431F7EC60400634039 /* HistoryController.swift */,
-				4025E92A1F816E32009FF616 /* HistoryCell.swift */,
 			);
 			path = History;
 			sourceTree = "<group>";
@@ -125,7 +128,6 @@
 			isa = PBXGroup;
 			children = (
 				40D25FD51F7EAD9F00D350DD /* FeedController.swift */,
-				406B68391F8040C000FB8766 /* FeedCell.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -156,6 +158,15 @@
 				40F2D4481F7FBD9300634039 /* ImageRequest.swift */,
 			);
 			path = Requests;
+			sourceTree = "<group>";
+		};
+		40F104C6209F093600AFC4A6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4025E92A1F816E32009FF616 /* HistoryCell.swift */,
+				406B68391F8040C000FB8766 /* FeedCell.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		40F2D4451F7FA40600634039 /* Resources */ = {
@@ -302,6 +313,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40F2D44D1F80103300634039 /* ApiResource.swift in Sources */,
+				40F104C5209F08DC00AFC4A6 /* DisplaySize.swift in Sources */,
 				406B683A1F8040C000FB8766 /* FeedCell.swift in Sources */,
 				40F2D4471F7FA49200634039 /* ImageItem.swift in Sources */,
 				40D25FD61F7EAD9F00D350DD /* FeedController.swift in Sources */,

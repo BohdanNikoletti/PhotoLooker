@@ -8,33 +8,38 @@
 
 import UIKit
 
-struct ImageItem{
+struct ImageItem: Decodable {
   
   // MARK: - Properties
   let id: String
   let title: String
-  let imageURL: URL
+  var imageURL: URL {
+    get {
+      return URL(string: displaySize.uri)!
+    }
+  }
   var imageKey: String {
     return "\(id).jpg"
   }
+  private var displaySize: DisplaySize
+  
+  enum CodingKeys: String, CodingKey {
+    case id, title, displaySizes = "display_sizes"
+  }
   
   // MARK: - Initializers
-  init(id: String, title: String, imageURL: URL){
-    self.id = id
-    self.title = title
-    self.imageURL = imageURL
+  init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    let displaySizes = try container.decode([DisplaySize].self, forKey: .displaySizes)
+    let id = try container.decode(String.self, forKey: .id)
+    let title = try container.decode(String.self, forKey: .title)
+   self.init(id: id, title: title, displaySize: displaySizes.first!)
   }
   
-  init?(withJsonObject json: [String: Any]){
-    guard let id = json["id"] as? String,
-      let title = json["title"] as? String,
-      let displaySizes = json["display_sizes"] as? [[String: Any]],
-      let uri = displaySizes[0]["uri"] as? String
-      else {
-        return nil
-    }
+  init (id: String, title: String, displaySize: DisplaySize) {
     self.id = id
     self.title = title
-    self.imageURL = URL(string: uri)!
+    self.displaySize = displaySize
   }
+  
 }

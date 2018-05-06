@@ -9,36 +9,33 @@
 import Foundation
 
 protocol ApiResource {
-    associatedtype Model
-    var methodPath: String {get}
-    var searchPhrase: String {get}
-    func makeModel(serialization:  [String: Any]) -> Model?
+  associatedtype Model
+  var methodPath: String {get}
+  var searchPhrase: String {get}
+  func makeModel(data: Data) -> [Model]?
 }
 
+// MARK: - Computed properties
 extension ApiResource {
+  
+  var url: URL{
+    var urlComponents = URLComponents()
+    urlComponents.scheme = "https"
+    urlComponents.host = APIEndpoints.host
+    urlComponents.path = "/v3/search\(methodPath)"
     
-    var url: URL{
-        var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = APIEndpoints.host
-        urlComponents.path = "/v3/search\(methodPath)"
-        
-        let fieldsQuery = URLQueryItem(name: "fields", value: "id,title,thumb")
-        let sortQuery = URLQueryItem(name: "sort_order", value: "best")
-        let phraseQuery = URLQueryItem(name: "phrase", value: searchPhrase)
-        
-        urlComponents.queryItems = [fieldsQuery, sortQuery,phraseQuery]
-        
-        return urlComponents.url!
-    }
+    let fieldsQuery = URLQueryItem(name: "fields", value: "id,title,thumb")
+    let sortQuery = URLQueryItem(name: "sort_order", value: "best")
+    let phraseQuery = URLQueryItem(name: "phrase", value: searchPhrase)
     
-    func makeModel(data: Data) ->[Model]? {
-        guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) else {return nil}
-        let jsonObj = json as? [String: Any]
-        let jsonArray = jsonObj?["images"] as? [[String: Any]]
-        return jsonArray?.map {
-            makeModel(serialization: $0)!
-        }
-    }
+    urlComponents.queryItems = [fieldsQuery, sortQuery,phraseQuery]
+    
+    return urlComponents.url!
+  }
+  
+  var decoder: JSONDecoder {
+    return JSONDecoder()
+  }
+
 }
 

@@ -19,7 +19,9 @@ final class HistoryItem: Object{
   //MARK: - Properties
   @objc dynamic var imagePath: String = ""
   @objc dynamic var requestPhrase: String = ""
-  
+  var image: UIImage? {
+    return ImageCachingService.sharedInstance.getImage(key: imagePath)
+  }
   //MARK: - Public methods
   override static func primaryKey() ->String? {
     return "requestPhrase"
@@ -43,17 +45,12 @@ final class HistoryItem: Object{
             print("Item: \(item) is invalidated")
             return
           }
-          do{
-            try FileManager.default.removeItem(at: URL(string: "file://\(item.imagePath)")!)
-          }catch{
-            print("error: \(error.localizedDescription)")
-          }
+          try? ImageCachingService.sharedInstance.delete(item.imagePath)
           realm.delete(item)
         }
       }
     } catch {
       print("Can not \(operation) history item: \(item)")
     }
-    
   }
 }

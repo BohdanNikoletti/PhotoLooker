@@ -9,7 +9,9 @@
 import Foundation
 
 struct ImageResource: ApiResource {
-  
+  struct Wrapper: Decodable {
+    let images: [ImageItem]
+  }
   var searchPhrase: String
   let methodPath = "/images"
   
@@ -17,7 +19,12 @@ struct ImageResource: ApiResource {
     self.searchPhrase = phrase
   }
   
-  func makeModel(serialization:  [String: Any]) -> ImageItem? {
-    return ImageItem(withJsonObject: serialization)
+  func makeModel(data: Data) -> [ImageItem]? {
+    do {
+      return try decoder.decode(Wrapper.self, from: data).images
+    } catch {
+      print(error)
+      return nil
+    }
   }
 }

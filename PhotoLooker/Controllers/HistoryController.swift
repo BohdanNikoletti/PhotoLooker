@@ -14,9 +14,9 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
   //MARK: - Properties
   private let searchController = UISearchController(searchResultsController: nil)
   private let cellId = "historyCell"
-  fileprivate var requests = HistoryItem.getHistory()
-  fileprivate var filteredRequests: [HistoryItem]!
-  fileprivate var request: AnyObject?
+  private var requests = HistoryItem.getHistory()
+  private var filteredRequests: [HistoryItem]!
+  private var request: AnyObject?
   
   //MARK: - Lifecycle events
   override func viewDidLoad() {
@@ -117,14 +117,13 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
     self.navigationController?.pushViewController(feedController, animated: true)
   }
   
-  private func loadImages(_ searchPhrase: String){
+  private func loadImages(_ searchPhrase: String) {
     
     searchController.searchBar.resignFirstResponder()
     let size = CGSize(width: 30, height: 30)
     startAnimating(size, message: "Looking for \(searchPhrase) images...😉", type: NVActivityIndicatorType.orbit)
     
-    let iamgesReqource = ImageResource(searchTo: searchPhrase)
-    let imagesRequest = ApiRequest(resource: iamgesReqource)
+    let imagesRequest = ApiRequest(resource: ImageResource(searchTo: searchPhrase))
     request = imagesRequest
     
     imagesRequest.load {

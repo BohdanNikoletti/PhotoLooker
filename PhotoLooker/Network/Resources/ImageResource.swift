@@ -14,11 +14,12 @@ struct ImageResource: ApiResource {
   }
   var searchPhrase: String
   let methodPath = "/images"
-  
-  init(searchTo phrase: String){
+  var page = 1
+
+  init(searchTo phrase: String) {
     self.searchPhrase = phrase
   }
-  
+
   func makeModel(data: Data) -> [ImageItem]? {
     do {
       return try decoder.decode(Wrapper.self, from: data).images

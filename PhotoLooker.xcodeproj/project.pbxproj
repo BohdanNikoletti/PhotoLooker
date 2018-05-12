@@ -110,26 +110,10 @@
 		40D40636209E0CD900CEA963 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				40D40637209E0CEC00CEA963 /* History */,
-				40D40638209E0D0100CEA963 /* Feed */,
-			);
-			path = Controllers;
-			sourceTree = "<group>";
-		};
-		40D40637209E0CEC00CEA963 /* History */ = {
-			isa = PBXGroup;
-			children = (
 				40F2D4431F7EC60400634039 /* HistoryController.swift */,
-			);
-			path = History;
-			sourceTree = "<group>";
-		};
-		40D40638209E0D0100CEA963 /* Feed */ = {
-			isa = PBXGroup;
-			children = (
 				40D25FD51F7EAD9F00D350DD /* FeedController.swift */,
 			);
-			path = Feed;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		40D40639209E0D1F00CEA963 /* Network */ = {

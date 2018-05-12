@@ -6,7 +6,7 @@
 //  Copyright © 2017 Bohdan Mihiliev. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 protocol NetworkRequest: class {
   associatedtype Model

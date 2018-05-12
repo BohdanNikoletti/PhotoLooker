@@ -12,6 +12,7 @@ protocol ApiResource {
   associatedtype Model
   var methodPath: String {get}
   var searchPhrase: String {get}
+  var page: Int { get }
   func makeModel(data: Data) -> [Model]?
 }
 
@@ -27,8 +28,9 @@ extension ApiResource {
     let fieldsQuery = URLQueryItem(name: "fields", value: "id,title,thumb")
     let sortQuery = URLQueryItem(name: "sort_order", value: "best")
     let phraseQuery = URLQueryItem(name: "phrase", value: searchPhrase)
-    
-    urlComponents.queryItems = [fieldsQuery, sortQuery,phraseQuery]
+    let pageQuery = URLQueryItem(name: "page", value: "\(page)")
+
+    urlComponents.queryItems = [fieldsQuery, sortQuery, phraseQuery, pageQuery]
     
     return urlComponents.url!
   }

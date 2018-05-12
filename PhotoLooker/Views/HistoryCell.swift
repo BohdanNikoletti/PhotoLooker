@@ -10,7 +10,7 @@ import UIKit
 
 final class HistoryCell: UITableViewCell {
   
-  //MARK: - Properties
+  // MARK: - Properties
   private let searchPhraseLabel: UILabel = {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 14)
@@ -35,13 +35,13 @@ final class HistoryCell: UITableViewCell {
   }()
   
   var historyItem: HistoryItem? {
-    didSet{
+    didSet {
       searchPhraseLabel.text = historyItem?.requestPhrase.uppercased()
       historyImageView.image = historyItem?.image ?? #imageLiteral(resourceName: "empty")
     }
   }
   
-  //MARK: - Lifecycle events
+  // MARK: - Lifecycle events
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     setupViews()
@@ -51,8 +51,8 @@ final class HistoryCell: UITableViewCell {
     setupViews()
   }
   
-  //MARK: - Private methods
-  private func setupViews(){
+  // MARK: - Private methods
+  private func setupViews() {
     
     self.accessoryType = .disclosureIndicator
     separatorInset = UIEdgeInsets.zero
@@ -73,4 +73,3 @@ final class HistoryCell: UITableViewCell {
     
   }
 }
-

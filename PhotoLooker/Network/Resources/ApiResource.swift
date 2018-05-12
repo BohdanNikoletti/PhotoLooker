@@ -10,16 +10,18 @@ import Foundation
 
 protocol ApiResource {
   associatedtype Model
-  var methodPath: String {get}
-  var searchPhrase: String {get}
+  
+  var methodPath: String { get }
+  var searchPhrase: String { get }
   var page: Int { get }
+  
   func makeModel(data: Data) -> [Model]?
 }
 
 // MARK: - Computed properties
 extension ApiResource {
   
-  var url: URL{
+  var url: URL {
     var urlComponents = URLComponents()
     urlComponents.scheme = "https"
     urlComponents.host = APIEndpoints.host
@@ -32,12 +34,10 @@ extension ApiResource {
 
     urlComponents.queryItems = [fieldsQuery, sortQuery, phraseQuery, pageQuery]
     
-    return urlComponents.url!
+    return urlComponents.url.unsafelyUnwrapped
   }
   
   var decoder: JSONDecoder {
     return JSONDecoder()
   }
-
 }
-

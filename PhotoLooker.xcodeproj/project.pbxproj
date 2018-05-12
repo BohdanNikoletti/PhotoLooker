@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4025E92B1F816E32009FF616 /* HistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4025E92A1F816E32009FF616 /* HistoryCell.swift */; };
 		406B683A1F8040C000FB8766 /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406B68391F8040C000FB8766 /* FeedCell.swift */; };
+		40A61D6520A712990029AABB /* FeedFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A61D6420A712990029AABB /* FeedFooterView.swift */; };
 		40D25FD41F7EAD9F00D350DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D25FD31F7EAD9F00D350DD /* AppDelegate.swift */; };
 		40D25FD61F7EAD9F00D350DD /* FeedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40D25FD51F7EAD9F00D350DD /* FeedController.swift */; };
 		40D25FDB1F7EAD9F00D350DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40D25FDA1F7EAD9F00D350DD /* Assets.xcassets */; };
@@ -31,6 +32,7 @@
 		0D4A1C18DF3E01E2B73D08C1 /* Pods_PhotoLooker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PhotoLooker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4025E92A1F816E32009FF616 /* HistoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryCell.swift; sourceTree = "<group>"; };
 		406B68391F8040C000FB8766 /* FeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
+		40A61D6420A712990029AABB /* FeedFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedFooterView.swift; sourceTree = "<group>"; };
 		40D25FD01F7EAD9F00D350DD /* PhotoLooker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoLooker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40D25FD31F7EAD9F00D350DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		40D25FD51F7EAD9F00D350DD /* FeedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedController.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 			children = (
 				4025E92A1F816E32009FF616 /* HistoryCell.swift */,
 				406B68391F8040C000FB8766 /* FeedCell.swift */,
+				40A61D6420A712990029AABB /* FeedFooterView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 				40D25FCD1F7EAD9F00D350DD /* Frameworks */,
 				40D25FCE1F7EAD9F00D350DD /* Resources */,
 				6A22825DE402D7C44B074348 /* [CP] Embed Pods Frameworks */,
+				40A61D6320A705450029AABB /* Swift Lint */,
 			);
 			buildRules = (
 			);
@@ -249,6 +253,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		40A61D6320A705450029AABB /* Swift Lint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Lint";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"";
+		};
 		6A22825DE402D7C44B074348 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -256,12 +274,14 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-PhotoLooker/Pods-PhotoLooker-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FTLinearActivityIndicator/FTLinearActivityIndicator.framework",
 				"${BUILT_PRODUCTS_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FTLinearActivityIndicator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVActivityIndicatorView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
@@ -307,6 +327,7 @@
 				40D658A91F817F5E005C02B2 /* Constants.swift in Sources */,
 				40F2D4441F7EC60400634039 /* HistoryController.swift in Sources */,
 				40D25FD41F7EAD9F00D350DD /* AppDelegate.swift in Sources */,
+				40A61D6520A712990029AABB /* FeedFooterView.swift in Sources */,
 				40D4063B209E0DDC00CEA963 /* ImageResource.swift in Sources */,
 				40F2D44B1F7FBDBA00634039 /* NetworkRequest.swift in Sources */,
 				40F2D44F1F80116900634039 /* ApiRequest.swift in Sources */,

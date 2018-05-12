@@ -9,9 +9,10 @@
 import Foundation
 
 struct ImageResource: ApiResource {
-  struct Wrapper: Decodable {
+  private struct Wrapper: Decodable {
     let images: [ImageItem]
   }
+  
   var searchPhrase: String
   let methodPath = "/images"
   var page = 1

@@ -10,18 +10,28 @@ import UIKit
 
 final class FeedController: UICollectionViewController {
   
-  //MARK: - Properties
+  // MARK: - Properties
   var items = [ImageItem]() {
     didSet {
       collectionView?.reloadData()
     }
   }
   private let cellId = "feedCell"
-  private var imagesResource = ImageResource(searchTo: "Cat")
+  private let footerReuseIdentifier = "footerView"
+  private var imagesResource: ImageResource
   private var request: AnyObject?
   private var isLoading = false
   
-  //MARK: - Lifecycle events
+  init(collectionViewLayout layout: UICollectionViewLayout, imagesResource: ImageResource) {
+    self.imagesResource = imagesResource
+    super.init(collectionViewLayout: layout)
+  }
+  
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  // MARK: - Lifecycle events
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -55,12 +65,33 @@ final class FeedController: UICollectionViewController {
       loadNexImages()
     }
   }
-  
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                      referenceSizeForFooterInSection section: Int) -> CGSize {
+    return CGSize(width: self.view.frame.width, height: 32)
+  }
+  override func collectionView(_ collectionView: UICollectionView,
+                               viewForSupplementaryElementOfKind kind: String,
+                               at indexPath: IndexPath) -> UICollectionReusableView {
+    if kind == UICollectionElementKindSectionFooter {
+      let header = collectionView.dequeueReusableSupplementaryView(
+        ofKind: UICollectionElementKindSectionFooter,
+        withReuseIdentifier: self.footerReuseIdentifier,
+        for: indexPath) as? FeedFooterView
+//      let weekTittle = NSLocalizedString("Week", comment: "")
+//      header?.title = indexPath.section == 0 ? "I \(weekTittle)" : "II \(weekTittle)"
+      return header ?? UICollectionReusableView()
+    } else {
+      return UICollectionReusableView()
+    }
+  }
   // MARK: - Private methods
-  private func settingUpcollectionView(){
+  private func settingUpcollectionView() {
     collectionView?.alwaysBounceVertical = true
     collectionView?.backgroundColor =  AppColors.secondaryLight
     collectionView?.register(FeedCeel.self, forCellWithReuseIdentifier: cellId)
+    collectionView?.register(FeedFooterView.self,
+                             forSupplementaryViewOfKind: UICollectionElementKindSectionFooter,
+                             withReuseIdentifier: self.footerReuseIdentifier)
   }
   
   private func loadNexImages() {
@@ -82,10 +113,11 @@ final class FeedController: UICollectionViewController {
 
 // MARK: - Flow layout delegate
 extension FeedController: UICollectionViewDelegateFlowLayout {
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+  func collectionView(_ collectionView: UICollectionView,
+                      layout collectionViewLayout: UICollectionViewLayout,
+                      sizeForItemAt indexPath: IndexPath) -> CGSize {
     let picDimension = self.view.frame.size.width / 3.0
     return CGSize(width: picDimension, height: picDimension)
   }
   
 }
-

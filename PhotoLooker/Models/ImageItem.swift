@@ -13,10 +13,8 @@ struct ImageItem: Decodable {
   // MARK: - Properties
   let id: String
   let title: String
-  var imageURL: URL {
-    get {
-      return URL(string: displaySize.uri)!
-    }
+  var imageURL: URL? {
+    return URL(string: displaySize.uri)
   }
   var imageKey: String {
     return "\(id).jpg"
@@ -33,7 +31,12 @@ struct ImageItem: Decodable {
     let displaySizes = try container.decode([DisplaySize].self, forKey: .displaySizes)
     let id = try container.decode(String.self, forKey: .id)
     let title = try container.decode(String.self, forKey: .title)
-   self.init(id: id, title: title, displaySize: displaySizes.first!)
+    guard let displaySize = displaySizes.first else {
+      let errorContext = DecodingError.Context(codingPath: [CodingKeys.displaySizes],
+                                               debugDescription: "Display  sizes is corruptedß")
+      throw DecodingError.dataCorrupted(errorContext)
+    }
+    self.init(id: id, title: title, displaySize: displaySize)
   }
   
   init (id: String, title: String, displaySize: DisplaySize) {

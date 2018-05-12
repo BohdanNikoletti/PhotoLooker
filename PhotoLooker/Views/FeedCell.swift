@@ -13,9 +13,9 @@ let imageCache = NSCache<NSString, UIImage>()
 
 final class FeedCeel: UICollectionViewCell {
   
-  //MARK: - Properties
+  // MARK: - Properties
   private var request: AnyObject?
-  private var activityIndicatorView: NVActivityIndicatorView!
+  private let activityIndicatorView: NVActivityIndicatorView
   private let titleLabel: UILabel = {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 11)
@@ -30,7 +30,7 @@ final class FeedCeel: UICollectionViewCell {
   
   // MARK: - Properties observers
   var feedItem: ImageItem? {
-    didSet{
+    didSet {
       titleLabel.text = feedItem?.title
       fetchImage()
     }
@@ -38,27 +38,31 @@ final class FeedCeel: UICollectionViewCell {
   
   // MARK: - Initializers
   override init(frame: CGRect) {
+    let witdh = frame.width / 4
+    let height = frame.height / 4
+    activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 3, y: 3, width: witdh, height: height),
+                                                    type: NVActivityIndicatorType.orbit)
+    activityIndicatorView.color = AppColors.primaryDark
     super.init(frame: frame)
     setupViews()
     addViews()
   }
   
   required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
+    fatalError("aDecoder initializer does not implemented")
   }
   
   // MARK: - Private methods
   private func fetchImage() {
-    guard let imageUrl = feedItem?.imageURL else{return}
+    guard let imageUrl = feedItem?.imageURL else { return }
     
     activityIndicatorView.startAnimating()
     
     let imageReq = ImageRequest(url: imageUrl)
     request = imageReq
     
-    imageReq.load(withCompletion: {
-      [weak self] (image: UIImage?) in
-      guard let image = image else {return}
+    imageReq.load(withCompletion: { [weak self] image in
+      guard let image = image else { return }
       let imageView = UIImageView(image: image)
       imageView.contentMode = .scaleAspectFit
       self?.backgroundView = imageView
@@ -67,25 +71,21 @@ final class FeedCeel: UICollectionViewCell {
     })
   }
   
-  private func setupViews(){
+  private func setupViews() {
     
     backgroundColor = AppColors.primary
     layer.borderWidth = 1
     layer.borderColor = UIColor.black.cgColor
-    
-    let witdh = frame.width / 4
-    let height = frame.height / 4
-    activityIndicatorView = NVActivityIndicatorView(frame: CGRect(x: 3, y: 3, width: witdh, height: height),
-                                                    type: NVActivityIndicatorType.orbit)
-    activityIndicatorView.color = AppColors.primaryDark
   }
   
-  private func addViews(){
+  private func addViews() {
     
     addSubview(titleLabel)
     addSubview(activityIndicatorView)
     
-    addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-3-[v0]-3-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": titleLabel]))
-    addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0": titleLabel]))
+    addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-3-[v0]-3-|", options: NSLayoutFormatOptions(),
+                                                  metrics: nil, views: ["v0": titleLabel]))
+    addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(),
+                                                  metrics: nil, views: ["v0": titleLabel]))
   }
 }

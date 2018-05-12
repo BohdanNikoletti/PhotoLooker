@@ -18,11 +18,11 @@ class ImageRequest {
 }
 extension ImageRequest: NetworkRequest {
     
-    func decode(_ data: Data) -> UIImage?{
+    func decode(_ data: Data) -> UIImage? {
         return UIImage(data: data)
     }
     
-    func load(withCompletion completion: @escaping(UIImage?) -> ()) {
+    func load(withCompletion completion: @escaping(UIImage?) -> Void ) {
         load(url, withCompletion: completion)
     }
 }

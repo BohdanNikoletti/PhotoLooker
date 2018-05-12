@@ -11,14 +11,14 @@ import NVActivityIndicatorView
 
 final class HistoryController: UITableViewController, NVActivityIndicatorViewable {
   
-  //MARK: - Properties
+  // MARK: - Properties
   private let searchController = UISearchController(searchResultsController: nil)
   private let cellId = "historyCell"
   private var requests = HistoryItem.getHistory()
-  private var filteredRequests: [HistoryItem]!
+  private var filteredRequests: [HistoryItem] = []
   private var request: AnyObject?
   
-  //MARK: - Lifecycle events
+  // MARK: - Lifecycle events
   override func viewDidLoad() {
     super.viewDidLoad()
     tableView.backgroundColor = AppColors.secondaryLight
@@ -44,6 +44,7 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
   }
   
   override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
     tableView.reloadData()
   }
   
@@ -61,7 +62,7 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
   }
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as? HistoryCell else{
+    guard let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as? HistoryCell else {
       fatalError("Unexpected cell! cann not cast to HistoryCell")
     }
     let historyItem = filteredRequests[indexPath.row]
@@ -76,22 +77,21 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
       requests = filteredRequests
     }
   }
-  
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let selectedRequest = filteredRequests[indexPath.row]
     let requestPhrase = selectedRequest.requestPhrase
     loadImages(requestPhrase)
   }
   
-  //MARK: - Private methods
-  private func settingUpCache(){
+  // MARK: - Private methods
+  private func settingUpCache() {
     let memoryCapacity = 30 * 512 * 512
     let dislCapacity = memoryCapacity
     let urlCache = URLCache(memoryCapacity: memoryCapacity, diskCapacity: dislCapacity, diskPath: "PhotoLooker")
     URLCache.shared = urlCache
   }
   
-  private func settingUpSearchControl(){
+  private func settingUpSearchControl() {
     searchController.searchResultsUpdater = self
     searchController.hidesNavigationBarDuringPresentation = false
     searchController.dimsBackgroundDuringPresentation = false
@@ -99,9 +99,9 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
     tableView.tableHeaderView = searchController.searchBar
   }
   
-  private func navigateToFeedController(withData loadedData: [ImageItem]){
+  private func navigateToFeedController(withData loadedData: [ImageItem], requestPhrase: String) {
     
-    if searchController.isActive{
+    if searchController.isActive {
       searchController.dismiss(animated: true, completion: nil)
     }
     
@@ -112,7 +112,8 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
     layout.minimumInteritemSpacing = 0
     layout.minimumLineSpacing = 0
     
-    let feedController = FeedController(collectionViewLayout: layout)
+    let feedController = FeedController(collectionViewLayout: layout,
+                                        imagesResource: ImageResource(searchTo: requestPhrase))
     feedController.items = loadedData
     self.navigationController?.pushViewController(feedController, animated: true)
   }
@@ -126,8 +127,7 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
     let imagesRequest = ApiRequest(resource: ImageResource(searchTo: searchPhrase))
     request = imagesRequest
     
-    imagesRequest.load {
-      [weak self] (imageItems: [ImageItem]?) in
+    imagesRequest.load { [weak self] imageItems in
       guard let items = imageItems,
         let firstItem = items.first
         else {
@@ -139,19 +139,18 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
       }
       self?.caсhe(item: firstItem, forPhrase: searchPhrase)
       self?.stopAnimating()
-      self?.navigateToFeedController(withData: items)
+      self?.navigateToFeedController(withData: items, requestPhrase: searchPhrase)
     }
   }
   
-  private func caсhe(item: ImageItem, forPhrase searchPhrase: String){
+  private func caсhe(item: ImageItem, forPhrase searchPhrase: String) {
     
     //Load first image from request result
-    let imageUrl = item.imageURL
+    guard let imageUrl = item.imageURL else { return }
     let imageReq = ImageRequest(url: imageUrl)
     request = imageReq
     
-    imageReq.load(withCompletion: {
-      [weak self] (image: UIImage?) in
+    imageReq.load(withCompletion: { [unowned self] image in
       
       guard let image = image else {
         print("Error during saving history: no image to caсhe")
@@ -167,10 +166,11 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
         historyItem.imagePath = item.imageKey
         historyItem.requestPhrase = searchPhrase.lowercased()
         HistoryItem.perform(operation: .add, on: historyItem)
-        if (self?.requests.filter{ $0.requestPhrase == historyItem.requestPhrase})?.count == 0 {
-          self?.requests.append(historyItem)
-          self?.filteredRequests = self?.requests
-          self?.tableView.reloadData()
+        let historyItemsByPhrase = self.requests.filter({ $0.requestPhrase == historyItem.requestPhrase })
+        if historyItemsByPhrase.isEmpty {
+          self.requests.append(historyItem)
+          self.filteredRequests = self.requests
+          self.tableView.reloadData()
         }
       }
     })
@@ -179,11 +179,10 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
 
 extension HistoryController: UISearchResultsUpdating, UISearchBarDelegate {
   
-  //MARK: - UISearchResultsUpdating
+  // MARK: - UISearchResultsUpdating
   func updateSearchResults(for searchController: UISearchController) {
     if let searchText = searchController.searchBar.text, !searchText.isEmpty {
-      filteredRequests = requests.filter {
-        request in
+      filteredRequests = requests.filter {  request in
         return request.requestPhrase.lowercased().contains(searchText.lowercased())
       }
     } else {
@@ -192,9 +191,9 @@ extension HistoryController: UISearchResultsUpdating, UISearchBarDelegate {
     tableView.reloadData()
   }
   
-  //MARK: - UISearchBarDelegate
+  // MARK: - UISearchBarDelegate
   func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-    guard let searchBarText = searchBar.text else {return}
+    guard let searchBarText = searchBar.text else { return }
     loadImages(searchBarText)
   }
 }

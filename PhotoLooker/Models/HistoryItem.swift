@@ -9,32 +9,35 @@
 import Foundation
 import RealmSwift
 
-enum HistoryItemOperations{
+enum HistoryItemOperations {
   case add
   case delete
 }
 
-final class HistoryItem: Object{
+final class HistoryItem: Object {
   
-  //MARK: - Properties
+  // MARK: - Properties
   @objc dynamic var imagePath: String = ""
   @objc dynamic var requestPhrase: String = ""
   var image: UIImage? {
     return ImageCachingService.sharedInstance.getImage(key: imagePath)
   }
-  //MARK: - Public methods
-  override static func primaryKey() ->String? {
+  // MARK: - Public methods
+  override static func primaryKey() -> String? {
     return "requestPhrase"
   }
   
-  static func getHistory() -> [HistoryItem]{
-    let realm = try! Realm()
-    return Array(realm.objects(HistoryItem.self))
+  static func getHistory() -> [HistoryItem] {
+    let realm = try? Realm()
+    guard let historyItems = realm?.objects(HistoryItem.self) else {
+      return []
+    }
+    return Array(historyItems)
   }
   
-  static func perform(operation: HistoryItemOperations, on item: HistoryItem){
-    let realm = try! Realm()
+  static func perform(operation: HistoryItemOperations, on item: HistoryItem) {
     do {
+      let realm = try Realm()
       try realm.write {
         
         switch operation {

@@ -8,8 +8,6 @@
 
 import UIKit
 import NVActivityIndicatorView
-// TODO: Images in cell cashing
-let imageCache = NSCache<NSString, UIImage>()
 
 final class FeedCeel: UICollectionViewCell {
   
@@ -31,11 +29,14 @@ final class FeedCeel: UICollectionViewCell {
   // MARK: - Properties observers
   var feedItem: ImageItem? {
     didSet {
-      titleLabel.text = feedItem?.title
-      fetchImage()
+      guard let itemToSet = feedItem else {
+        return
+      }
+      titleLabel.text = itemToSet.title
+      fetchImage(for: itemToSet.imageURL)
     }
   }
-  
+
   // MARK: - Initializers
   override init(frame: CGRect) {
     let witdh = frame.width / 4
@@ -52,23 +53,30 @@ final class FeedCeel: UICollectionViewCell {
     fatalError("aDecoder initializer does not implemented")
   }
   
+  // MARK: - Lifecycle events
+  override func prepareForReuse() {
+    super.prepareForReuse()
+    self.backgroundView = nil
+  }
+  
   // MARK: - Private methods
-  private func fetchImage() {
-    guard let imageUrl = feedItem?.imageURL else { return }
-    
+  private func fetchImage(for imageUrl: URL?) {
+    guard let imageUrl = imageUrl else { return }
     activityIndicatorView.startAnimating()
     
     let imageReq = ImageRequest(url: imageUrl)
     request = imageReq
+    if let image = imageCache.object(forKey: NSString(string: imageUrl.absoluteString)) {
+      self.setImageView(from: image)
+    } else {
+      imageReq.load(withCompletion: { [weak self] image in
+        guard let image = image else { return }
+        if imageUrl != self?.feedItem?.imageURL { return }
+        imageCache.setObject(image, forKey: NSString(string: imageUrl.absoluteString))
+        self?.setImageView(from: image)
+      })
+    }
     
-    imageReq.load(withCompletion: { [weak self] image in
-      guard let image = image else { return }
-      let imageView = UIImageView(image: image)
-      imageView.contentMode = .scaleAspectFit
-      self?.backgroundView = imageView
-      self?.titleLabel.text = ""
-      self?.activityIndicatorView.stopAnimating()
-    })
   }
   
   private func setupViews() {
@@ -87,5 +95,14 @@ final class FeedCeel: UICollectionViewCell {
                                                   metrics: nil, views: ["v0": titleLabel]))
     addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(),
                                                   metrics: nil, views: ["v0": titleLabel]))
+  }
+  
+  private func setImageView(from image: UIImage) {
+    let imageView = UIImageView(image: image)
+    imageView.contentMode = .scaleAspectFill
+    imageView.clipsToBounds = true
+    self.backgroundView = imageView
+    self.titleLabel.text = ""
+    self.activityIndicatorView.stopAnimating()
   }
 }

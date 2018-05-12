@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FTLinearActivityIndicator
 
 final class FeedFooterView: UICollectionReusableView {
 

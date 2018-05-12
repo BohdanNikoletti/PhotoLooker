@@ -8,6 +8,8 @@
 
 import UIKit
 
+let imageCache = NSCache<NSString, UIImage>()
+
 enum AppColors {
     static let primaryDark = UIColor.purple
     static let primary = UIColor.white

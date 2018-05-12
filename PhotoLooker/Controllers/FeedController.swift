@@ -34,7 +34,9 @@ final class FeedController: UICollectionViewController {
   // MARK: - Lifecycle events
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+//    let memoryCapacity = 500 * 1024 * 1024
+//    let diskCapacity = 500 * 1024 * 1024
+//    let urlCache = NSURLCache
     navigationItem.title = "Looker results"
     self.navigationController?.navigationBar.tintColor = AppColors.primary
     

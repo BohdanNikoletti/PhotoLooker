@@ -13,6 +13,7 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
   
   // MARK: - Properties
   private let searchController = UISearchController(searchResultsController: nil)
+  private let rowHeight: CGFloat = 80
   private let cellId = "historyCell"
   private var requests = HistoryItem.getHistory()
   private var filteredRequests: [HistoryItem] = []
@@ -21,21 +22,13 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
   // MARK: - Lifecycle events
   override func viewDidLoad() {
     super.viewDidLoad()
-    tableView.backgroundColor = AppColors.secondaryLight
-    
-    tableView.separatorStyle = .singleLine
-    settingUpCache()
     
     filteredRequests = requests
     
-    navigationItem.title = "Looker History"
-    self.navigationItem.backBarButtonItem = UIBarButtonItem(
-      title: "", style: .plain, target: nil, action: nil)
-    
-    tableView.tableFooterView = UIView()
-    tableView.register(HistoryCell.self, forCellReuseIdentifier: cellId)
-    
+    settingUpTableView()
     settingUpSearchControl()
+    settingUpSearchBar()
+    settingUpNavigationItem()
   }
   
   override func didReceiveMemoryWarning() {
@@ -48,17 +41,14 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
     tableView.reloadData()
   }
   
-  // MARK: - Table view data source & delegate
-  override func numberOfSections(in tableView: UITableView) -> Int {
-    return 1
-  }
+//  // MARK: - Table view data source & delegate
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return filteredRequests.count
   }
   
   override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    return 80
+    return rowHeight
   }
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -84,34 +74,54 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
   }
   
   // MARK: - Private methods
-  private func settingUpCache() {
-    let memoryCapacity = 30 * 512 * 512
-    let dislCapacity = memoryCapacity
-    let urlCache = URLCache(memoryCapacity: memoryCapacity, diskCapacity: dislCapacity, diskPath: "PhotoLooker")
-    URLCache.shared = urlCache
+  private func settingUpNavigationItem() {
+    navigationItem.title = "Looker History"
+    navigationItem.backBarButtonItem = UIBarButtonItem(
+      title: "", style: .plain, target: nil, action: nil)
+    navigationItem.hidesSearchBarWhenScrolling = false
+    navigationItem.searchController = searchController
+  }
+  
+  private func settingUpTableView() {
+    tableView.backgroundColor = AppColors.secondaryLight
+    tableView.separatorStyle = .singleLine
+    tableView.tableFooterView = UIView()
+    tableView.register(HistoryCell.self, forCellReuseIdentifier: cellId)
   }
   
   private func settingUpSearchControl() {
     searchController.searchResultsUpdater = self
+    searchController.obscuresBackgroundDuringPresentation = false
+    searchController.searchBar.placeholder = "What are you looking for?🧐"
     searchController.hidesNavigationBarDuringPresentation = false
     searchController.dimsBackgroundDuringPresentation = false
-    searchController.searchBar.delegate = self
-    tableView.tableHeaderView = searchController.searchBar
+    
+    definesPresentationContext = true
+
+  }
+  
+  private func settingUpSearchBar() {
+    let searchBar = searchController.searchBar
+    searchBar.tintColor = UIColor.white
+    searchBar.barTintColor = UIColor.purple
+    searchBar.delegate = self
+    (UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]))
+      .defaultTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: UIColor.white]
   }
   
   private func navigateToFeedController(withData loadedData: [ImageItem], requestPhrase: String) {
-    
-    if searchController.isActive {
-      searchController.dismiss(animated: true, completion: nil)
-    }
-    
+
     //Customize feed control layout
-    let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-    layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
-    layout.itemSize = CGSize(width: self.view.frame.size.width/3, height: self.view.frame.size.width/3)
-    layout.minimumInteritemSpacing = 0
-    layout.minimumLineSpacing = 0
-    
+//    let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+//    layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
+//    layout.itemSize = CGSize(width: self.view.frame.size.width/3, height: self.view.frame.size.width/3)
+//    layout.minimumInteritemSpacing = 0
+//    layout.minimumLineSpacing = 0
+    let layout = MosaicLayout()
+//    layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
+//    layout.itemSize = CGSize(width: self.view.frame.size.width/3, height: self.view.frame.size.width/3)
+//    layout.minimumInteritemSpacing = 0
+//    layout.minimumLineSpacing = 0
     let feedController = FeedController(collectionViewLayout: layout,
                                         imagesResource: ImageResource(searchTo: requestPhrase))
     feedController.items = loadedData
@@ -131,7 +141,9 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
       guard let items = imageItems,
         let firstItem = items.first
         else {
-          NVActivityIndicatorPresenter.sharedInstance.setMessage("Searching for \(searchPhrase) didn't give any results 😔")
+          NVActivityIndicatorPresenter
+            .sharedInstance
+            .setMessage("Searching for \(searchPhrase) didn't give any results 😔")
           DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
             self?.stopAnimating()
           }
@@ -160,8 +172,8 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
       // Save locally image and request data
       if let data = UIImageJPEGRepresentation(image, 0.5),
         let image = UIImage(data: data) {
-        ImageCachingService.sharedInstance.saveImage(image: image, key: item.imageKey)
-        
+        let key = ImageCachingService.Key.id(key: item.imageKey)
+        ImageCachingService.shared.save(image: image, key: key)
         let historyItem = HistoryItem()
         historyItem.imagePath = item.imageKey
         historyItem.requestPhrase = searchPhrase.lowercased()

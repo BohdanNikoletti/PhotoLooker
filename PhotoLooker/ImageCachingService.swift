@@ -8,41 +8,76 @@
 
 import UIKit
 
+private extension FileManager {
+  var documentsDirectory: URL {
+    let paths = self.urls(for: .documentDirectory,
+                          in: .userDomainMask)
+    return paths[0]
+  }
+}
+
 final class ImageCachingService {
   
   // MARK: - Properties
-  static let sharedInstance = ImageCachingService()
+  static let shared = ImageCachingService()
+  private let cache = NSCache<NSString, UIImage>()
   private let fileManager = FileManager.default
   
+  enum Key {
+    case id(key: String)
+    
+    var identificator: String {
+      switch self {
+      case .id(key: let stringKey):
+        return stringKey
+      }
+    }
+    
+    var file: URL {
+      switch self {
+      case .id(key: let stringKey):
+        return FileManager.default
+          .documentsDirectory
+          .appendingPathComponent("\(stringKey).png")
+      }
+    }
+  }
   // MARK: - Initalizers
-  private init() { }
+  private init() {
+    settingUpCache()
+  }
   
   // MARK: - Public methods
-  func saveImage(image: UIImage, key: String) {
+  func cache(image: UIImage, key: Key) {
+    cache.setObject(image, forKey: NSString(string: key.identificator))
+  }
+  func getCachedImage(by key: Key) -> UIImage? {
+    return cache.object(forKey: NSString(string: key.identificator))
+  }
+  func save(image: UIImage, key: Key) {
     if let data = UIImagePNGRepresentation(image) {
-      let filename = getDocumentsDirectory().appendingPathComponent("\(key).png")
-      try? data.write(to: filename)
+      try? data.write(to: key.file)
     }
   }
   
-  func getImage(key: String) -> UIImage? {
-    let filename = getDocumentsDirectory().appendingPathComponent("\(key).png")
-    if fileManager.fileExists(atPath: filename.path),
-      let imageData = fileManager.contents(atPath: filename.path) {
+  func getImage(by key: Key) -> UIImage? {
+    let fileName = key.file
+    if fileManager.fileExists(atPath: fileName.path),
+      let imageData = fileManager.contents(atPath: fileName.path) {
       return UIImage(data: imageData)
     }
     return nil
   }
   
-  func delete( _ key: String) throws {
-    let filename = getDocumentsDirectory().appendingPathComponent("\(key).png")
+  func delete( _ key: Key) throws {
+    let filename = key.file
     if fileManager.fileExists(atPath: filename.path) {
       try fileManager.removeItem(atPath: filename.path)
     }
   }
   
   func refresh() {
-    let path = getDocumentsDirectory().path
+    let path =  FileManager.default.documentsDirectory.path
     guard let items = try? fileManager.contentsOfDirectory(atPath: path) else { return }
     
     for item in items {
@@ -53,9 +88,13 @@ final class ImageCachingService {
   }
   
   // MARK: - Private methods
-  private func getDocumentsDirectory() -> URL {
-    let paths = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
-    return paths[0]
+  private func settingUpCache() {
+    let memoryCapacity = 30 * 512 * 512
+    let diskCapacity = memoryCapacity
+    let urlCache = URLCache(memoryCapacity: memoryCapacity,
+                            diskCapacity: diskCapacity,
+                            diskPath: "PhotoLooker")
+    URLCache.shared = urlCache
   }
   
 }

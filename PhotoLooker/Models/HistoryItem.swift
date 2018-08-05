@@ -20,7 +20,8 @@ final class HistoryItem: Object {
   @objc dynamic var imagePath: String = ""
   @objc dynamic var requestPhrase: String = ""
   var image: UIImage? {
-    return ImageCachingService.sharedInstance.getImage(key: imagePath)
+    let key = ImageCachingService.Key.id(key: imagePath)
+    return ImageCachingService.shared.getImage(by: key)
   }
   // MARK: - Public methods
   override static func primaryKey() -> String? {
@@ -48,7 +49,8 @@ final class HistoryItem: Object {
             print("Item: \(item) is invalidated")
             return
           }
-          try? ImageCachingService.sharedInstance.delete(item.imagePath)
+          let key = ImageCachingService.Key.id(key: item.imagePath)
+          try? ImageCachingService.shared.delete(key)
           realm.delete(item)
         }
       }

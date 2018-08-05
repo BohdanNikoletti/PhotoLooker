@@ -1,36 +1,32 @@
 PODS:
   - FTLinearActivityIndicator (1.0.4)
-  - NVActivityIndicatorView (4.2.1):
-    - NVActivityIndicatorView/Presenter (= 4.2.1)
-  - NVActivityIndicatorView/Presenter (4.2.1)
-  - Realm (3.5.0):
-    - Realm/Headers (= 3.5.0)
-  - Realm/Headers (3.5.0)
-  - RealmSwift (3.5.0):
-    - Realm (= 3.5.0)
-  - SwiftLint (0.25.1)
+  - NVActivityIndicatorView (4.3.0):
+    - NVActivityIndicatorView/Presenter (= 4.3.0)
+  - NVActivityIndicatorView/Presenter (4.3.0)
+  - Realm (3.7.5):
+    - Realm/Headers (= 3.7.5)
+  - Realm/Headers (3.7.5)
+  - RealmSwift (3.7.5):
+    - Realm (= 3.7.5)
 
 DEPENDENCIES:
   - FTLinearActivityIndicator
   - NVActivityIndicatorView
   - RealmSwift
-  - SwiftLint
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - FTLinearActivityIndicator
     - NVActivityIndicatorView
     - Realm
     - RealmSwift
-    - SwiftLint
 
 SPEC CHECKSUMS:
   FTLinearActivityIndicator: 0c4ff2067cd67d88fd932ec214da90083ea7148e
-  NVActivityIndicatorView: 8068ba3ad39cb44cbaab25d89ff2546b3f092681
-  Realm: 0378021c424e4e2bd6a0e63b27881e929d9b9ad1
-  RealmSwift: 3322562622fda2ad596985ead4d8d8be30cf838c
-  SwiftLint: ce933681be10c3266e82576dad676fa815a602e9
+  NVActivityIndicatorView: 963f62bf9f993fcf23218e55958e5b1761b9504c
+  Realm: c286caf4dbf346ce24aad49ca76c7ce622d4a082
+  RealmSwift: 2a9281e37d6de55f66f76254d49d28aeb1b729e4
 
-PODFILE CHECKSUM: 630757a934e2066c2bb6a05d50352be337895cc2
+PODFILE CHECKSUM: f6d7799cfa1da44db61ba601c38b52726ec426bb
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.3

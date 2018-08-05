@@ -8,6 +8,5 @@ target 'PhotoLooker' do
   # Pods for PhotoLooker
   pod 'NVActivityIndicatorView'
   pod 'RealmSwift'
-  pod 'SwiftLint'
   pod 'FTLinearActivityIndicator'
 end

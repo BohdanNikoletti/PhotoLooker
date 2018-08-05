@@ -34,12 +34,9 @@ final class FeedController: UICollectionViewController {
   // MARK: - Lifecycle events
   override func viewDidLoad() {
     super.viewDidLoad()
-//    let memoryCapacity = 500 * 1024 * 1024
-//    let diskCapacity = 500 * 1024 * 1024
-//    let urlCache = NSURLCache
     navigationItem.title = "Looker results"
-    self.navigationController?.navigationBar.tintColor = AppColors.primary
-    
+    navigationController?.navigationBar.tintColor = AppColors.primary
+    (self.collectionViewLayout as? MosaicLayout)?.delegate = self
     settingUpcollectionView()
   }
   override func didReceiveMemoryWarning() {
@@ -79,8 +76,6 @@ final class FeedController: UICollectionViewController {
         ofKind: UICollectionElementKindSectionFooter,
         withReuseIdentifier: self.footerReuseIdentifier,
         for: indexPath) as? FeedFooterView
-//      let weekTittle = NSLocalizedString("Week", comment: "")
-//      header?.title = indexPath.section == 0 ? "I \(weekTittle)" : "II \(weekTittle)"
       return header ?? UICollectionReusableView()
     } else {
       return UICollectionReusableView()
@@ -112,14 +107,17 @@ final class FeedController: UICollectionViewController {
     }
   }
 }
-
-// MARK: - Flow layout delegate
-extension FeedController: UICollectionViewDelegateFlowLayout {
-  func collectionView(_ collectionView: UICollectionView,
-                      layout collectionViewLayout: UICollectionViewLayout,
-                      sizeForItemAt indexPath: IndexPath) -> CGSize {
-    let picDimension = self.view.frame.size.width / 3.0
-    return CGSize(width: picDimension, height: picDimension)
+extension FeedController: MosaicLayoutDelegate {
+  func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath:IndexPath) -> CGFloat {
+    return 200//items[indexPath.item].image.size.height
   }
-  
 }
+// MARK: - Flow layout delegate
+//extension FeedController: UICollectionViewDelegateFlowLayout {
+//  func collectionView(_ collectionView: UICollectionView,
+//                      layout collectionViewLayout: UICollectionViewLayout,
+//                      sizeForItemAt indexPath: IndexPath) -> CGSize {
+//    let picDimension = self.view.frame.size.width / 3.0
+//    return CGSize(width: picDimension, height: picDimension)
+//  }
+//}

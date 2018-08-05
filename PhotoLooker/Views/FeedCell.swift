@@ -36,7 +36,7 @@ final class FeedCeel: UICollectionViewCell {
       fetchImage(for: itemToSet.imageURL)
     }
   }
-
+  
   // MARK: - Initializers
   override init(frame: CGRect) {
     let witdh = frame.width / 4
@@ -63,20 +63,22 @@ final class FeedCeel: UICollectionViewCell {
   private func fetchImage(for imageUrl: URL?) {
     guard let imageUrl = imageUrl else { return }
     activityIndicatorView.startAnimating()
-    
+    let key = ImageCachingService.Key.id(key: imageUrl.absoluteString)
+
     let imageReq = ImageRequest(url: imageUrl)
     request = imageReq
-    if let image = imageCache.object(forKey: NSString(string: imageUrl.absoluteString)) {
+    if let image = ImageCachingService
+      .shared
+      .getCachedImage(by: key) {
       self.setImageView(from: image)
     } else {
       imageReq.load(withCompletion: { [weak self] image in
         guard let image = image else { return }
         if imageUrl != self?.feedItem?.imageURL { return }
-        imageCache.setObject(image, forKey: NSString(string: imageUrl.absoluteString))
+        ImageCachingService.shared.cache(image: image, key: key)
         self?.setImageView(from: image)
       })
     }
-    
   }
   
   private func setupViews() {
@@ -91,7 +93,7 @@ final class FeedCeel: UICollectionViewCell {
     addSubview(titleLabel)
     addSubview(activityIndicatorView)
     
-    addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-3-[v0]-3-|", options: NSLayoutFormatOptions(),
+    addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-4-[v0]-4-|", options: NSLayoutFormatOptions(),
                                                   metrics: nil, views: ["v0": titleLabel]))
     addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(),
                                                   metrics: nil, views: ["v0": titleLabel]))

@@ -27,7 +27,7 @@ extension ApiResource {
     urlComponents.host = APIEndpoints.host
     urlComponents.path = "/v3/search\(methodPath)"
     
-    let fieldsQuery = URLQueryItem(name: "fields", value: "id,title,preview")
+    let fieldsQuery = URLQueryItem(name: "fields", value: "id,title,thumb")
     let sortQuery = URLQueryItem(name: "sort_order", value: "best")
     let phraseQuery = URLQueryItem(name: "phrase", value: searchPhrase)
     let pageQuery = URLQueryItem(name: "page", value: "\(page)")

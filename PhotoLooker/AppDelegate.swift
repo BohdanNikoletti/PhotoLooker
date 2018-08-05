@@ -28,9 +28,6 @@ private extension AppDelegate {
     let navigationController = UINavigationController(rootViewController: historyController)
     navigationController.navigationBar.barTintColor = AppColors.primaryDark
     navigationController.navigationBar.tintColor = AppColors.primary
-    
-//    navigationController.navigationBar.shadowImage = UIImage()
-//    navigationController.navigationBar.isTranslucent = false
     navigationController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
     
     window?.rootViewController = navigationController

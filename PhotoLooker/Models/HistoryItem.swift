@@ -23,6 +23,7 @@ final class HistoryItem: Object {
     let key = ImageCachingService.Key.id(key: imagePath)
     return ImageCachingService.shared.getImage(by: key)
   }
+  
   // MARK: - Public methods
   override static func primaryKey() -> String? {
     return "requestPhrase"

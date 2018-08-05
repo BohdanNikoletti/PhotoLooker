@@ -22,6 +22,7 @@ final class FeedController: UICollectionViewController {
   private var request: AnyObject?
   private var isLoading = false
   
+  // MARK: - Initializers
   init(collectionViewLayout layout: UICollectionViewLayout, imagesResource: ImageResource) {
     self.imagesResource = imagesResource
     super.init(collectionViewLayout: layout)
@@ -35,8 +36,6 @@ final class FeedController: UICollectionViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationItem.title = "Looker results"
-    navigationController?.navigationBar.tintColor = AppColors.primary
-    (self.collectionViewLayout as? MosaicLayout)?.delegate = self
     settingUpcollectionView()
   }
   override func didReceiveMemoryWarning() {
@@ -64,10 +63,7 @@ final class FeedController: UICollectionViewController {
       loadNexImages()
     }
   }
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                      referenceSizeForFooterInSection section: Int) -> CGSize {
-    return CGSize(width: self.view.frame.width, height: 32)
-  }
+
   override func collectionView(_ collectionView: UICollectionView,
                                viewForSupplementaryElementOfKind kind: String,
                                at indexPath: IndexPath) -> UICollectionReusableView {
@@ -107,17 +103,17 @@ final class FeedController: UICollectionViewController {
     }
   }
 }
-extension FeedController: MosaicLayoutDelegate {
-  func collectionView(_ collectionView: UICollectionView, heightForPhotoAtIndexPath indexPath:IndexPath) -> CGFloat {
-    return 200//items[indexPath.item].image.size.height
+
+// MARK: - Flow layout delegate
+extension FeedController: UICollectionViewDelegateFlowLayout {
+  func collectionView(_ collectionView: UICollectionView,
+                      layout collectionViewLayout: UICollectionViewLayout,
+                      sizeForItemAt indexPath: IndexPath) -> CGSize {
+    let picDimension = self.view.frame.size.width / 3.0
+    return CGSize(width: picDimension, height: picDimension)
+  }
+  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                      referenceSizeForFooterInSection section: Int) -> CGSize {
+    return CGSize(width: self.view.frame.width, height: 32)
   }
 }
-// MARK: - Flow layout delegate
-//extension FeedController: UICollectionViewDelegateFlowLayout {
-//  func collectionView(_ collectionView: UICollectionView,
-//                      layout collectionViewLayout: UICollectionViewLayout,
-//                      sizeForItemAt indexPath: IndexPath) -> CGSize {
-//    let picDimension = self.view.frame.size.width / 3.0
-//    return CGSize(width: picDimension, height: picDimension)
-//  }
-//}

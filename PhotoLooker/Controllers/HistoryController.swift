@@ -41,8 +41,7 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
     tableView.reloadData()
   }
   
-//  // MARK: - Table view data source & delegate
-  
+  // MARK: - Table view data source & delegate
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return filteredRequests.count
   }
@@ -103,7 +102,7 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
   private func settingUpSearchBar() {
     let searchBar = searchController.searchBar
     searchBar.tintColor = UIColor.white
-    searchBar.barTintColor = UIColor.purple
+    searchBar.barTintColor = AppColors.primary
     searchBar.delegate = self
     (UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]))
       .defaultTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: UIColor.white]
@@ -112,16 +111,12 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
   private func navigateToFeedController(withData loadedData: [ImageItem], requestPhrase: String) {
 
     //Customize feed control layout
-//    let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-//    layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
-//    layout.itemSize = CGSize(width: self.view.frame.size.width/3, height: self.view.frame.size.width/3)
-//    layout.minimumInteritemSpacing = 0
-//    layout.minimumLineSpacing = 0
-    let layout = MosaicLayout()
-//    layout.sectionInset = UIEdgeInsets(top: 5, left: 0, bottom: 5, right: 0)
-//    layout.itemSize = CGSize(width: self.view.frame.size.width/3, height: self.view.frame.size.width/3)
-//    layout.minimumInteritemSpacing = 0
-//    layout.minimumLineSpacing = 0
+    let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+    layout.sectionInset = UIEdgeInsets.zero//(top: 0, left: 0, bottom: 0, right: 0)
+    layout.itemSize = CGSize(width: view.frame.size.width/3,
+                             height: view.frame.size.width/3)
+    layout.minimumInteritemSpacing = 0
+    layout.minimumLineSpacing = 0
     let feedController = FeedController(collectionViewLayout: layout,
                                         imagesResource: ImageResource(searchTo: requestPhrase))
     feedController.items = loadedData
@@ -132,7 +127,8 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
     
     searchController.searchBar.resignFirstResponder()
     let size = CGSize(width: 30, height: 30)
-    startAnimating(size, message: "Looking for \(searchPhrase) images...😉", type: NVActivityIndicatorType.orbit)
+    startAnimating(size, message: "Looking for \(searchPhrase) images...😉",
+      type: NVActivityIndicatorType.orbit)
     
     let imagesRequest = ApiRequest(resource: ImageResource(searchTo: searchPhrase))
     request = imagesRequest

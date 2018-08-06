@@ -12,7 +12,7 @@ Was build using MVC architecture.
 ## ScreenShots
 Write a request  🤔        |  Wait a little 😌        |  Enjoy the result 😍
 :-------------------------:|:-------------------------:|:-------------------------:
-![simulator screen shot 1 2017 23 32 28](https://user-images.githubusercontent.com/16256553/31058723-03a5d89c-a701-11e7-9181-e9fb2ccb2c45.png).|![simulator screen shot 1 2017 23 32 44](https://user-images.githubusercontent.com/16256553/31058739-391ee392-a701-11e7-914e-9cc1cee88c5d.png).|![simulator screen shot 1 2017 23 32 48](https://user-images.githubusercontent.com/16256553/31058740-3b083442-a701-11e7-8d66-86271526c584.png).
+![first](https://user-images.githubusercontent.com/16256553/43717993-ee217f60-9991-11e8-9beb-f246323b24a1.png)|![second](https://user-images.githubusercontent.com/16256553/43718027-0b97de0e-9992-11e8-85f2-21a43ffff46f.png)|![third](https://user-images.githubusercontent.com/16256553/43718039-15a7c08a-9992-11e8-953f-4679907436f2.png)
 
 
 

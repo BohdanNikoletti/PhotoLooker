@@ -20,7 +20,7 @@ final class HistoryItem: Object {
   @objc dynamic var imagePath: String = ""
   @objc dynamic var requestPhrase: String = ""
   var image: UIImage? {
-    let key = ImageCachingService.Key.id(key: imagePath)
+    let key = ImageCachingService.Key.string(imagePath)
     return ImageCachingService.shared.getImage(by: key)
   }
   
@@ -50,7 +50,7 @@ final class HistoryItem: Object {
             print("Item: \(item) is invalidated")
             return
           }
-          let key = ImageCachingService.Key.id(key: item.imagePath)
+          let key = ImageCachingService.Key.string(item.imagePath)
           try? ImageCachingService.shared.delete(key)
           realm.delete(item)
         }

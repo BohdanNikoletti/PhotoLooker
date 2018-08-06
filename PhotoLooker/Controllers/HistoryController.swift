@@ -168,7 +168,7 @@ final class HistoryController: UITableViewController, NVActivityIndicatorViewabl
       // Save locally image and request data
       if let data = UIImageJPEGRepresentation(image, 0.5),
         let image = UIImage(data: data) {
-        let key = ImageCachingService.Key.id(key: item.imageKey)
+        let key = ImageCachingService.Key.string(item.imageKey)
         ImageCachingService.shared.save(image: image, key: key)
         let historyItem = HistoryItem()
         historyItem.imagePath = item.imageKey

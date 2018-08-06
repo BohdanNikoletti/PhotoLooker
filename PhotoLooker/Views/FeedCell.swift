@@ -63,7 +63,7 @@ final class FeedCeel: UICollectionViewCell {
   private func fetchImage(for imageUrl: URL?) {
     guard let imageUrl = imageUrl else { return }
     activityIndicatorView.startAnimating()
-    let key = ImageCachingService.Key.id(key: imageUrl.absoluteString)
+    let key = ImageCachingService.Key.string(imageUrl.absoluteString)
 
     let imageReq = ImageRequest(url: imageUrl)
     request = imageReq

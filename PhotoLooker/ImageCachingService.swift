@@ -24,18 +24,18 @@ final class ImageCachingService {
   private let fileManager = FileManager.default
   
   enum Key {
-    case id(key: String)
+    case string(String)
     
     var identificator: String {
       switch self {
-      case .id(key: let stringKey):
+      case .string(let stringKey):
         return stringKey
       }
     }
     
     var file: URL {
       switch self {
-      case .id(key: let stringKey):
+      case .string(let stringKey):
         return FileManager.default
           .documentsDirectory
           .appendingPathComponent("\(stringKey).png")
